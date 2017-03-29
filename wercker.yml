@@ -1,13 +1,13 @@
 box: node:7
 build:
   steps:
-#    - npm-install
-#    - script:
-#        name: copy build to deployable
-#        code: cp -a ./dist/. $WERCKER_OUTPUT_DIR
+    - npm-install
     - script:
-        name: add index.html
-        code: cp ./index.html $WERCKER_OUTPUT_DIR
+        name: build
+        code: npm run generate
+    - script:
+        name: copy build to deployable
+        code: cp -a ./dist/. $WERCKER_OUTPUT_DIR
     - script:
         name: add CNAME
         code: cp ./CNAME $WERCKER_OUTPUT_DIR
