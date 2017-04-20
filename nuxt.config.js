@@ -10,17 +10,27 @@ module.exports = {
       { hid: 'description', name: 'description', content: "L'application Cargo." }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', type: 'text/css', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#3B8070' },
+  loading: { color: '#2ecc71' },
+  /*
+  ** Global CSS
+  */
+  css: ['vuetify/dist/vuetify.min.css', '~assets/css/main.css'],
+  /*
+  ** Plugins configuration
+  */
+  plugins: ['~plugins/vuetify'],
   /*
   ** Build configuration
   */
   build: {
+    vendor: ['vuetify'],
     /*
     ** Run ESLINT on save
     */
