@@ -1,10 +1,18 @@
 box: node:7
 build:
   steps:
-    - npm-install
+    - script:
+        name: install yarn
+        code: npm install -g yarn
+    - script:
+        name: set yarn cache
+        code: yarn config set cache-folder $WERCKER_CACHE_DIR/yarn
+    - script:
+        name: install dependencies
+        code: yarn
     - script:
         name: build
-        code: npm run generate
+        code: yarn generate
     - script:
         name: copy build to deployable
         code: cp -a ./dist/. $WERCKER_OUTPUT_DIR
