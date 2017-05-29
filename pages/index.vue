@@ -8,7 +8,7 @@
 
         <v-layout>
           <v-flex xs12 md4>
-            <v-card class="white">
+            <v-card>
               <v-card-text>
                 <div>
                   <b>Des contrôles accessibles</b><br>
@@ -20,7 +20,7 @@
             </v-card>
           </v-flex>
           <v-flex xs12 md4>
-            <v-card class="white">
+            <v-card>
               <v-card-text>
                 <div>
                   <b>Un contrôle vocal</b><br>
@@ -32,7 +32,7 @@
             </v-card>
           </v-flex>
           <v-flex xs12 md4>
-            <v-card class="white">
+            <v-card>
               <v-card-text>
                 <div>
                   <b>Partage de position</b><br>

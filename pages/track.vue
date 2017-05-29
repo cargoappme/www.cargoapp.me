@@ -1,5 +1,6 @@
 <template>
   <v-container fluid class="no_padding">
+
     <v-layout class="row_full without_margin">
       <v-flex xs9 class="map_container">
         <div id="map" ref="map" />
@@ -29,17 +30,47 @@
               <v-icon>hourglass_empty</v-icon> <b>20 minutes</b> de trajet<br>
               <v-icon>trending_up</v-icon> <b>50km</b> parcourus<br>
               <v-icon>linear_scale</v-icon> <b>100km/h</b> de vitesse moyenne<br>
-              <v-icon>trending_down</v-icon> <b>50km</b> restants<br>
+              <v-icon>trending_down</v-icon> <b>50km</b> restants<br><br>
+              <v-progress-circular
+                :size="50"
+                :width="5"
+                :rotate="-90"
+                :value="50"
+                class="teal--text progress"
+              >
+                ~50%
+              </v-progress-circular> <div class="progress_text">du trajet effectué</div>
             </div>
           </v-card-text>
         </v-card>
       </v-flex>
+    </v-layout>
+
+    <v-layout row justify-center>
+      <v-dialog v-model="loadingDialog" persistent>
+        <v-card>
+          <v-card-row>
+            <v-card-title>Chargement...</v-card-title>
+          </v-card-row>
+          <v-card-row>
+            <v-card-text class="text-xs-center">
+              <v-progress-circular indeterminate v-bind:size="70" v-bind:width="7" class="green--text">
+              </v-progress-circular>
+            </v-card-text>
+          </v-card-row>
+        </v-card>
+      </v-dialog>
     </v-layout>
   </v-container>
 </template>
 
 <script>
 const MAPS_API_KEY = 'AIzaSyAswGeCJTj45iAENRAflQJPEBeu-pW2PVQ'
+/* const WS_API_URL = 'https://cargo-api.herokuapp.com?token='
+const WS_CLOSE_CODES = {
+  NO_TOKEN: 4000,
+  NON_EXISTENT_TOKEN: 4001
+} */
 
 export default {
   head: {
@@ -49,6 +80,7 @@ export default {
   },
   data () {
     return {
+      loadingDialog: false,
       id: null,
       map: null,
       fromMarker: null,
@@ -72,6 +104,9 @@ export default {
         clearInterval(googleWatchdog)
       }
     }, 100)
+  },
+  mounted () {
+    this.loadingDialog = true
   },
   methods: {
     initMap () {
@@ -122,7 +157,7 @@ export default {
 </script>
 
 <style>
-html, body, #__nuxt, .container, .row_full, .map_container {
+html, body, #__nuxt, .application, .container, .row_full, .map_container {
   height: 100%;
 }
 
@@ -145,5 +180,15 @@ html, body, #__nuxt, .container, .row_full, .map_container {
 
 .map_data {
   padding: 0 !important;
+}
+
+.progress {
+  float: left;
+}
+
+.progress_text {
+  height: 50px;
+  line-height: 50px;
+  margin-left: 60px;
 }
 </style>
