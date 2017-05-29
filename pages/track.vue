@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid="fluid">
-    <v-row class="row_full">
-      <v-col xs9 class="map_container">
+  <v-container fluid class="no_padding">
+    <v-layout class="row_full without_margin">
+      <v-flex xs9 class="map_container">
         <div id="map" ref="map" />
-      </v-col>
-      <v-col xs3 class="map_data">
+      </v-flex>
+      <v-flex xs3 class="map_data">
         <v-card class="green darken-1 white--text">
           <v-card-text>
             <div>
@@ -22,7 +22,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card>
+        <v-card class="white">
           <v-card-text>
             <div>
               <v-icon>flight_takeoff</v-icon> Départ à <b>12h30</b><br>
@@ -33,8 +33,8 @@
             </div>
           </v-card-text>
         </v-card>
-      </v-col>
-    </v-row>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -124,6 +124,14 @@ export default {
 <style>
 html, body, #__nuxt, .container, .row_full, .map_container {
   height: 100%;
+}
+
+.no_padding {
+  padding: 0;
+}
+
+.without_margin {
+  margin: 0;
 }
 
 #map {

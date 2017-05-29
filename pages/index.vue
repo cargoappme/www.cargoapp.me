@@ -1,14 +1,14 @@
 <template>
-  <v-container fluid="fluid">
-    <v-row>
-      <v-col xs9 class="main_view">
+  <v-container fluid>
+    <v-layout>
+      <v-flex xs9 class="main_view">
         <h1><img src="../assets/img/cargo_text.png" alt="Cargo"></h1>
 
         <h2>Sécurisez votre utilisation du téléphone en voiture.</h2>
 
-        <v-row>
-          <v-col xs12 md4>
-            <v-card>
+        <v-layout>
+          <v-flex xs12 md4>
+            <v-card class="white">
               <v-card-text>
                 <div>
                   <b>Des contrôles accessibles</b><br>
@@ -18,9 +18,9 @@
                 </div>
               </v-card-text>
             </v-card>
-          </v-col>
-          <v-col xs12 md4>
-            <v-card>
+          </v-flex>
+          <v-flex xs12 md4>
+            <v-card class="white">
               <v-card-text>
                 <div>
                   <b>Un contrôle vocal</b><br>
@@ -30,9 +30,9 @@
                 </div>
               </v-card-text>
             </v-card>
-          </v-col>
-          <v-col xs12 md4>
-            <v-card>
+          </v-flex>
+          <v-flex xs12 md4>
+            <v-card class="white">
               <v-card-text>
                 <div>
                   <b>Partage de position</b><br>
@@ -41,19 +41,19 @@
                 </div>
               </v-card-text>
             </v-card>
-          </v-col>
-        </v-row>
+          </v-flex>
+        </v-layout>
 
-        <v-row class="badges">
-          <v-col xs12>
+        <v-layout class="badges">
+          <v-flex xs12>
             <img src="../assets/img/google-play-badge.png" alt="Play Store">
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col xs3>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+      <v-flex xs3>
         <img src="../assets/img/screenshot.png" alt="Screenshot">
-      </v-col>
-    </v-row>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
