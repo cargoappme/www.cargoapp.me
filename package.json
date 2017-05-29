@@ -5,8 +5,12 @@
   "author": "Marvin Roger <nivramdu94@gmail.com>",
   "private": true,
   "dependencies": {
-    "nuxt": "^0.10.5",
-    "vuetify": "^0.11.1"
+    "date-fns": "^1.28.4",
+    "nuxt": "^0.10.7",
+    "vue": "2.2.6",
+    "vue-server-renderer": "2.2.6",
+    "vue-template-compiler": "2.2.6",
+    "vuetify": "^0.12.2"
   },
   "scripts": {
     "dev": "nuxt",
