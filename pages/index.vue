@@ -6,7 +6,7 @@
 
         <h2>Sécurisez votre utilisation du téléphone en voiture.</h2>
 
-        <v-layout>
+        <v-layout wrap>
           <v-flex xs12 md4>
             <v-card>
               <v-card-text>
@@ -46,7 +46,7 @@
 
         <v-layout class="badges">
           <v-flex xs12>
-            <img src="../assets/img/google-play-badge.png" alt="Play Store">
+            <a href="https://play.google.com/store/apps/details?id=me.cargoapp.cargo"><img src="../assets/img/google-play-badge.png" alt="Play Store"></a>
           </v-flex>
         </v-layout>
       </v-flex>
