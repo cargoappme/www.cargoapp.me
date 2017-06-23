@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "date-fns": "^1.28.4",
+    "eventemitter3": "^2.0.3",
     "nuxt": "^0.10.7",
     "vue": "2.2.6",
     "vue-server-renderer": "2.2.6",
