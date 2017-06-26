@@ -8,41 +8,39 @@
         <v-card class="green darken-1 white--text" v-if="journey.isFinished">
           <v-card-text>
             <div>
-              Trajet terminé à <b>12h30</b>.
+              Trajet terminé à <b>{{ formatDate(journey.end.date) }} (il y a {{ distanceInWords(journey.end.date) }})</b>.
             </div>
           </v-card-text>
         </v-card>
 
-        <template v-else>
-          <v-card class="blue darken-1 white--text">
-            <v-card-text>
-              <div>
-                Trajet démarré le <b>{{ formatDate(journey.start.date) }} (il y a {{ distanceInWords(journey.start.date) }})</b>.<br>
-                Dernière mise à jour : <b>{{ formatDate(lastPosition.date) }} (il y a {{ distanceInWords(lastPosition.date) }})</b>
-              </div>
-            </v-card-text>
-          </v-card>
+        <v-card class="blue darken-1 white--text" v-else>
+          <v-card-text>
+            <div>
+              Trajet démarré le <b>{{ formatDate(journey.start.date) }} (il y a {{ distanceInWords(journey.start.date) }})</b>.<br>
+              Dernière mise à jour : <b>{{ formatDate(lastPosition.date) }} (il y a {{ distanceInWords(lastPosition.date) }})</b>
+            </div>
+          </v-card-text>
+        </v-card>
 
-          <v-card class="white">
-            <v-card-text>
-              <div>
-                <v-icon>hourglass_empty</v-icon> <b>{{ distanceInWords(journey.start.date) }}</b> de trajet<br>
-                <v-icon>trending_up</v-icon> <b>~{{ distanceBetweenTwoCoordinates(journey.start, lastPosition) }}km</b> parcourus<br>
-                <v-icon>linear_scale</v-icon> <b>~{{ parseInt(distanceBetweenTwoCoordinates(journey.start, lastPosition) / ((new Date() - journey.start.date) / 36e5)) }}km/h</b> de vitesse moyenne<br>
-                <v-icon>trending_down</v-icon> <b>~{{ journey.totalDistance - distanceBetweenTwoCoordinates(journey.start, lastPosition) }}km</b> restants<br><br>
-                <v-progress-circular
-                  :size="50"
-                  :width="5"
-                  :rotate="-90"
-                  :value="parseInt(distanceBetweenTwoCoordinates(journey.start, lastPosition) * 100 / journey.totalDistance)"
-                  class="teal--text progress"
-                >
-                  ~{{ parseInt(distanceBetweenTwoCoordinates(journey.start, lastPosition) * 100 / journey.totalDistance) }}%
-                </v-progress-circular> <div class="progress_text">du trajet effectué</div>
-              </div>
-            </v-card-text>
-          </v-card>
-        </template>
+        <v-card class="white">
+          <v-card-text>
+            <div>
+              <v-icon>hourglass_empty</v-icon> <b>{{ journey.isFinished ? distanceInWords(journey.start.date, journey.end.date) : distanceInWords(journey.start.date) }}</b> de trajet<br>
+              <v-icon>trending_up</v-icon> <b>~{{ distanceBetweenTwoCoordinates(journey.start, lastPosition) }}km</b> parcourus<br>
+              <v-icon>linear_scale</v-icon> <b>~{{ parseInt(distanceBetweenTwoCoordinates(journey.start, lastPosition) / (((journey.isFinished ? journey.end.date : new Date()) - journey.start.date) / 36e5)) }}km/h</b> de vitesse moyenne<br>
+              <v-icon>trending_down</v-icon> <b>~{{ journey.totalDistance - distanceBetweenTwoCoordinates(journey.start, lastPosition) }}km</b> restants<br><br>
+              <v-progress-circular
+                :size="50"
+                :width="5"
+                :rotate="-90"
+                :value="parseInt(distanceBetweenTwoCoordinates(journey.start, lastPosition) * 100 / journey.totalDistance)"
+                class="teal--text progress"
+              >
+                ~{{ parseInt(distanceBetweenTwoCoordinates(journey.start, lastPosition) * 100 / journey.totalDistance) }}%
+              </v-progress-circular> <div class="progress_text">du trajet effectué</div>
+            </div>
+          </v-card-text>
+        </v-card>
       </v-flex>
     </v-layout>
 
@@ -66,7 +64,7 @@
 
 <script>
 import frLocale from 'date-fns/locale/fr'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
+import distanceInWords from 'date-fns/distance_in_words'
 import format from 'date-fns/format'
 import {WebSocket} from '~/lib/websocket'
 
@@ -120,7 +118,8 @@ export default {
       toMarker: null,
       positionsMarker: [],
       positionMarker: null,
-      pathPolyline: null
+      pathPolyline: null,
+      pathHistory: null
     }
   },
   created () {
@@ -146,7 +145,6 @@ export default {
     this.ws.start()
 
     this.ws.on('open', () => {
-      console.log('opened')
     })
 
     this.ws.on('message', (message) => {
@@ -198,11 +196,11 @@ export default {
     })
 
     this.ws.on('close', (event) => {
-      console.log('closed')
-
       if (event.code === WS_CLOSE_CODES.NON_EXISTENT_TOKEN) {
         this.ws.stop()
         this.$router.replace('/')
+      } else {
+        this.pathHistory = []
       }
     })
 
@@ -226,22 +224,27 @@ export default {
         map: this.map
       })
 
+      this.pathHistory = []
+
       this.pathPolyline = new window.google.maps.Polyline({
-        path: [],
+        path: this.pathHistory,
         geodesic: true,
-        strokeColor: '#e74c3c',
+        strokeColor: '#27ae60',
         strokeOpacity: 1.0,
-        strokeWeight: 2,
+        strokeWeight: 5,
         map: this.map
       })
     },
     addPosition (position) {
       this.lastPosition = position
 
-      this.positionMarker.setPosition({ lat: parseFloat(position.geo.lat), lng: parseFloat(position.geo.long) })
+      const posObj = { lat: parseFloat(position.geo.lat), lng: parseFloat(position.geo.long) }
+
+      this.positionMarker.setPosition(posObj)
+      this.pathHistory.push(posObj)
+      this.pathPolyline.setPath(this.pathHistory)
     },
     distanceBetweenTwoCoordinates (coord1, coord2) {
-      console.log(coord1)
       const toRadians = (number) => {
         return number * Math.PI / 180
       }
@@ -261,8 +264,8 @@ export default {
 
       return parseInt(d / 1000)
     },
-    distanceInWords (date) {
-      return distanceInWordsToNow(date, { locale: frLocale })
+    distanceInWords (date1, date2 = new Date()) {
+      return distanceInWords(date1, date2, { locale: frLocale })
     },
     formatDate (date) {
       return format(date, 'DD/MM/YYYY à HH:mm', { locale: frLocale })
